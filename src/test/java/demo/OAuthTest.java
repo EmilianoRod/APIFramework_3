@@ -1,6 +1,7 @@
 package demo;
 
 import io.restassured.path.json.JsonPath;
+import pojo.GetCourse;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
@@ -25,13 +26,18 @@ public class OAuthTest {
 
 
 
-        String response2 = given()
+        GetCourse gc = given()
                 .queryParam("access_token", accessToken)
                 .when().log().all()
                 .get("https://rahulshettyacademy.com/oauthapi/getCourseDetails")
-                .asString();
+                .as(GetCourse.class);
 
-        System.out.println(response2);
+        System.out.println(gc.getLinkedIn());
+        System.out.println(gc.getInstructor());
+        System.out.println(gc.getCourses().getApi().get(1).getCourseTitle());
+       ;
+
+
 
     }
 }
