@@ -1,14 +1,22 @@
 package demo;
 
 import io.restassured.path.json.JsonPath;
+import org.testng.Assert;
+import pojo.Api;
 import pojo.GetCourse;
+import pojo.WebAutomation;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
 
 public class OAuthTest {
 
     public static void main(String[] args) {
+
+        String[] courseTitles = {"Selenium Webdriver Java", "Cypress", "Protractor", "SoapUI Webservices testing", "Rest Assured Automation using Java"};
 
 
         String response = given()
@@ -32,10 +40,30 @@ public class OAuthTest {
                 .get("https://rahulshettyacademy.com/oauthapi/getCourseDetails")
                 .as(GetCourse.class);
 
-        System.out.println(gc.getLinkedIn());
-        System.out.println(gc.getInstructor());
-        System.out.println(gc.getCourses().getApi().get(1).getCourseTitle());
-       ;
+//        System.out.println(gc.getLinkedIn());
+//        System.out.println(gc.getInstructor());
+//        System.out.println(gc.getCourses().getApi().get(1).getCourseTitle());
+
+
+
+        List<Api> apiCourses = gc.getCourses().getApi();
+        for(int i=0 ; i < apiCourses.size() ; i++) {
+
+            if( apiCourses.get(i).getCourseTitle().equalsIgnoreCase("SoapUI Webservices testing")) {
+                System.out.println(apiCourses.get(i).getPrice());
+            }
+        }
+
+
+        // Get the course name of WebAutomation
+        ArrayList<String> courseTitlesList = new ArrayList<String>();
+        List<WebAutomation> webAutomationCourses = gc.getCourses().getWebAutomation();
+        for(int j=0 ; j < webAutomationCourses.size() ; j++ ) {
+            courseTitlesList.add(webAutomationCourses.get(j).getCourseTitle());
+        }
+
+        List<String> expectedList = Arrays.asList(courseTitles);
+        Assert.assertTrue(courseTitlesList.equals(expectedList));
 
 
 
